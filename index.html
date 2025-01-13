@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OptiPay Enterprise</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.29.0/feather.min.js"></script>
+    <style>
+        :root {
+            --primary: #0066FF;
+            --primary-dark: #0052CC;
+            --secondary: #6B7280;
+            --success: #10B981;
+            --danger: #EF4444;
+            --warning: #F59E0B;
+            --info: #3B82F6;
+            --gray-50: #F9FAFB;
+            --gray-100: #F3F4F6;
+            --gray-200: #E5E7EB;
+            --gray-700: #374151;
+            --gray-800: #1F2937;
+            --gray-900: #111827;
+            --transition-speed: 0.3s;
+        }
+
+        [data-theme="dark"] {
+            --primary: #60A5FA;
+            --primary-dark: #3B82F6;
+            --gray-50: #111827;
+            --gray-100: #1F2937;
+            --gray-200: #374151;
+            --gray-700: #D1D5DB;
+            --gray-800: #E5E7EB;
+            --gray-900: #F9FAFB;
+            color-scheme: dark;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: background-color var(--transition-speed),
+                        border-color var(--transition-speed),
+                        color var(--transition-speed);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--gray-50);
+            color: var(--gray-800);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background: white;
+            border-bottom: 1px solid var(--gray-200);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Theme toggle styles */
+        .theme-toggle {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            position: relative;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color var(--transition-speed);
+        }
+
+        .theme-toggle:hover {
+            background-color: var(--gray-100);
+        }
+
+        .theme-toggle .sun,
+        .theme-toggle .moon {
+            position: absolute;
+            transition: all var(--transition-speed) ease;
+        }
+
+        .theme-toggle .sun {
+            color: #F59E0B;
+            transform: scale(1) rotate(0);
+        }
+
+        .theme-toggle .moon {
+            color: #60A5FA;
+            transform: scale(0) rotate(-90deg);
+        }
+
+        [data-theme="dark"] .theme-toggle .sun {
+            transform: scale(0) rotate(90deg);
+        }
+
+        [data-theme="dark"] .theme-toggle .moon {
+            transform: scale(1) rotate(0);
+        }
+
+        /* Stars animation */
+        .stars {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity var(--transition-speed);
+        }
+
+        .star {
+            position: absolute;
+            background-color: white;
+            border-radius: 50%;
+            animation: twinkle 1.5s infinite;
+        }
+
+        [data-theme="dark"] .stars {
+            opacity: 0.5;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 1; }
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .nav-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .button {
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            font-weight: 500;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: none;
+        }
+
+        .button-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .button-primary:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .button-ghost {
+            background-color: transparent;
+            color: var(--gray-700);
+        }
+
+        .button-ghost:hover {
+            background-color: var(--gray-100);
+        }
+
+        .button-danger {
+            background-color: var(--danger);
+            color: white;
+        }
+
+        .button-danger:hover {
+            background-color: #DC2626;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .dashboard-header {
+            margin-bottom: 2rem;
+        }
+
+        .dashboard-title {
+            font-size: 1.875rem;
+            font-weight: 600;
+            color: var(--gray-900);
+            margin-bottom: 0.5rem;
+        }
+
+        .dashboard-subtitle {
+            color: var(--gray-700);
+            font-size: 1rem;
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.3s;
+            border: 1px solid var(--gray-200);
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+            border-color: var(--primary);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .card-icon {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 10px;
+        }
+
+        .card-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--gray-900);
+        }
+
+        .card-description {
+            color: var(--gray-700);
+            font-size: 0.875rem;
+            line-height: 1.5;
+        }
+
+        .card-footer {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--primary);
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-top: auto;
+        }
+
+        .footer {
+            background-color: white;
+            border-top: 1px solid var(--gray-200);
+            padding: 1.5rem;
+            text-align: center;
+            color: var(--gray-700);
+            font-size: 0.875rem;
+        }
+
+        [data-theme="dark"] .header {
+            background-color: #1a1a1a;
+            border-color: var(--gray-200);
+        }
+
+        [data-theme="dark"] .card {
+            background-color: #1a1a1a;
+            border-color: var(--gray-200);
+        }
+
+        [data-theme="dark"] .footer {
+            background-color: #1a1a1a;
+            border-color: var(--gray-200);
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 1rem;
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .main-content {
+                padding: 1rem;
+            }
+
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo-section">
+            <a href="/" class="logo">OptiPay</a>
+        </div>
+        <nav class="nav-actions">
+            <button class="theme-toggle" aria-label="Toggle theme">
+                <i data-feather="sun" class="sun"></i>
+                <i data-feather="moon" class="moon"></i>
+                <div class="stars"></div>
+            </button>
+            <button class="button button-ghost">
+                <i data-feather="bell"></i>
+            </button>
+            <button class="button button-ghost">
+                <i data-feather="settings"></i>
+            </button>
+            <button class="button button-danger" onclick="confirmLogout()">
+                <i data-feather="log-out"></i>
+                Logout
+            </button>
+        </nav>
+    </header>
+
+    <main class="main-content">
+        <div class="dashboard-header">
+            <h1 class="dashboard-title">Welcome back!</h1>
+            <p class="dashboard-subtitle">Manage your organization's payroll and HR operations</p>
+        </div>
+
+        <div class="cards-grid">
+            <a href="employee-management.html" class="card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i data-feather="users"></i>
+                    </div>
+                    <h2 class="card-title">Employee Management</h2>
+                </div>
+                <p class="card-description">
+                    Manage employee profiles, documents, and information. Handle onboarding, transfers, and exits efficiently.
+                </p>
+                <div class="card-footer">
+                    <span>Access Manager</span>
+                    <i data-feather="arrow-right"></i>
+                </div>
+            </a>
+
+            <a href="payroll-processing.html" class="card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i data-feather="dollar-sign"></i>
+                    </div>
+                    <h2 class="card-title">Payroll Processing</h2>
+                </div>
+                <p class="card-description">
+                    Process payroll, manage salaries, bonuses, and deductions. Generate payslips and tax documents.
+                </p>
+                <div class="card-footer">
+                    <span>Process Payroll</span>
+                    <i data-feather="arrow-right"></i>
+                </div>
+            </a>
+
+            <a href="attendance.html" class="card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i data-feather="clock"></i>
+                    </div>
+                    <h2 class="card-title">Time & Attendance</h2>
+                </div>
+                <p class="card-description">
+                    Track employee attendance, manage leave requests, and monitor work hours.
+                </p>
+                <div class="card-footer">
+                    <span>View Attendance</span>
+                    <i data-feather="arrow-right"></i>
+                </div>
+            </a>
+
+            <a href="reports.html" class="card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i data-feather="bar-chart-2"></i>
+                    </div>
+                    <h2 class="card-title">Reports & Analytics</h2>
+                </div>
+                <p class="card-description">
+                    Generate comprehensive reports and analyze payroll metrics and trends.
+                </p>
+                <div class="card-footer">
+                    <span>View Reports</span>
+                    <i data-feather="arrow-right"></i>
+                </div>
+            </a>
+
+            <a href="tax-compliance.html" class="card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i data-feather="shield"></i>
+                    </div>
+                    <h2 class="card-title">Tax & Compliance</h2>
+                </div>
+                <p class="card-description">
+                    Manage tax calculations, ensure compliance, and handle statutory requirements.
+                </p>
+                <div class="card-footer">
+                    <span>View Compliance</span>
+                    <i data-feather="arrow-right"></i>
+                </div>
+            </a>
+
+            <a href="settings.html" class="card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i data-feather="settings"></i>
+                    </div>
+                    <h2 class="card-title">System Settings</h2>
+                </div>
+                <p class="card-description">
+                    Configure system preferences, manage user access, and customize workflows.
+                </p>
+                <div class="card-footer">
+                    <span>Configure Settings</span>
+                    <i data-feather="arrow-right"></i>
+                </div>
+            </a>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>© 2025 OptiPay. All rights reserved.</p>
+        <p>Advanced Payroll Solution by cometco.llc</p>
+    </footer>
+
+    <script>
+        // Initialize Feather Icons
+        feather.replace();
+    
+        // Theme toggle functionality
+        const themeToggle = document.querySelector('.theme-toggle');
+        const html = document.documentElement;
+        
+        // Create stars
+        const starsContainer = document.querySelector('.stars');
+        for (let i = 0; i < 20; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.left = `${Math.random() * 100}%`;
+            star.style.top = `${Math.random() * 100}%`;
+            star.style.width = `${Math.random() * 2 + 1}px`;
+            star.style.height = star.style.width;
+            star.style.animationDelay = `${Math.random() * 1.5}s`;
+            starsContainer.appendChild(star);
+        }
+    
+        // Check for saved theme preference or default to 'light'
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        html.setAttribute('data-theme', savedTheme);
+    
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        });
+    
+        function confirmLogout() {
+            if (confirm("Are you sure you want to log out?")) {
+                window.location.href = 'login.html';
+            }
+        }
+    </script>
+    </body>
+    </html>
